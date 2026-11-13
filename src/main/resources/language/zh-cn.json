@@ -1,0 +1,15 @@
+{
+  "source" : {
+    "auto" : "自动选择（推荐）",
+    "mirror" : "镜像（适合国内用户）",
+    "official" : "官方（适合国际用户）"
+  },
+  "status" : {
+    "downloading_json" : "正在下载版本 JSON 文件",
+    "downloading_jar" : "正在下载版本核心文件",
+    "downloading_libraries" : "正在下载版本依赖",
+    "downloading_assets" : "正在下载版本资源",
+    "extracting_natives" : "正在提取版本原生文件",
+    "completed" : "下载完成"
+  }
+}

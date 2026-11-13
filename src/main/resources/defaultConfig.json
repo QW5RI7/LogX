@@ -1,0 +1,29 @@
+{
+  "x": -1,
+  "y": -1,
+  "width": 640,
+  "height": 480,
+  "selectedUserId": 0,
+  "defaultMaxMemory": 4096, // 单位：MB，默认4GB
+  "defaultCustomJvmArgs": "",
+  "defaultJavaPath": "",
+  "selectedMinecraftPath": "",
+  "isVersionIsolation": true,
+  "defaultDownloadSourceType": "auto",
+  "language": "zh-cn",
+  "backgroundPath": null,
+  "minecraftPaths": [
+    {
+      "path": "./.minecraft",
+      "lastSelectedVersion": "",
+      "configurations": {
+        "Default": {
+          "versionId": "1.20.2",
+          "maxMemory": 4096,
+          "customJvmArgs": "",
+          "javaPath": ""
+        }
+      }
+    }
+  ]
+}

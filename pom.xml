@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.qw5ri7.logx</groupId>
+    <artifactId>logx</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <javafx.version>17.0.6</javafx.version>
+    </properties>
+
+    <dependencies>
+        <!-- JavaFX 基础控件和 FXML -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.19</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.46</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.47.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.28.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.raphimc</groupId>
+            <artifactId>MinecraftAuth</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <!-- Ikonli 核心库 (通常已包含 Lucide 图标) -->
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-core</artifactId>
+            <version>12.3.1</version>
+        </dependency>
+
+        <!-- JavaFX 集成 -->
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>12.3.1</version>
+        </dependency>
+
+
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- 原有的编译插件等... -->
+
+            <!-- 打包插件：把所有依赖打进一个 jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <!-- 这里必须写 Launcher，不能写 Main -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.github.qw5ri7.logx.Launcher</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>merge-exe-and-jar</id>
+                        <!-- 绑定在 package 阶段，确保在 shade 插件打出 fat jar 之后执行 -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="exe.file" value="${project.basedir}/src/main/resources/exe/Launcher.exe" />
+                                <property name="jar.file" value="${project.build.directory}/${project.build.finalName}.jar" />
+                                <property name="output.file" value="${project.build.directory}/${project.build.finalName}.exe" />
+
+                                <!-- 1. 二进制拼接 exe 和 jar -->
+                                <!--suppress UnresolvedMavenProperty -->
+                                <concat destfile="${output.file}" binary="true" force="true">
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <fileset file="${exe.file}" />
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <fileset file="${jar.file}" />
+                                </concat>
+
+                                <!-- 2. 将 jar 的长度（8字节）追加到文件末尾 -->
+                                <!-- 注意：这里需要借助 Ant 的能力来计算文件大小并追加 -->
+                                <exec executable="powershell" failonerror="true">
+                                    <arg value="-NoProfile" />
+                                    <arg value="-Command" />
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <arg value="
+                            $exe = '${exe.file}';
+                            $jar = '${jar.file}';
+                            $out = '${output.file}';
+                            $jarSize = (Get-Item $jar).Length;
+                            $bytes = [BitConverter]::GetBytes([Int64]$jarSize);
+                            $stream = [System.IO.File]::Open($out, [System.IO.FileMode]::Append);
+                            $stream.Write($bytes, 0, $bytes.Length);
+                            $stream.Close();
+                        " />
+                                </exec>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <echo message="成功生成单文件 EXE: ${output.file}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

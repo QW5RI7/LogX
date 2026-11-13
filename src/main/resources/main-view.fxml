@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <VBox prefHeight="400.0" prefWidth="67.0" BorderPane.alignment="CENTER">
+         <children>
+            <JFXButton prefHeight="65.0" prefWidth="75.0" text="启动" />
+            <JFXButton prefHeight="65.0" prefWidth="75.0" text="下载" />
+            <JFXButton prefHeight="65.0" prefWidth="75.0" text="工具" />
+            <Pane prefHeight="154.0" prefWidth="67.0" VBox.vgrow="ALWAYS" />
+            <JFXButton prefHeight="65.0" prefWidth="75.0" text="设置" />
+         </children>
+      </VBox>
+   </left>
+   <top>
+      <HBox prefHeight="48.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="56.0" prefWidth="124.0" text="  LogX" textFill="#ff0a0a">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Pane prefHeight="48.0" prefWidth="262.0" HBox.hgrow="ALWAYS" />
+            <JFXButton prefHeight="48.0" prefWidth="58.0" text="帮助" />
+            <JFXButton prefHeight="48.0" prefWidth="59.0" text="最小化" />
+            <JFXButton prefHeight="48.0" prefWidth="56.0" text="关闭" />
+         </children>
+      </HBox>
+   </top>
+</BorderPane>

@@ -1,0 +1,35 @@
+================ LogX 启动器 配置文件指南 ================
+
+【注意】修改此文件前请先关闭启动器，并严格遵循 JSON 语法！
+（如果不小心改坏了，LogX 会自动将其备份为 config.json.bak 并恢复默认配置）
+
+================ 界面与全局设置 ================
+
+"x" / "y"：窗口启动时的坐标（-1 表示在屏幕居中）
+"width" / "height"：窗口的宽度和高度（默认 640 x 480）
+"selectedUserId"：当前选中的账号 ID，0 为没有选中任何账号
+"selectedMinecraftPath"：当前正在使用的 Minecraft 路径，默认为空
+
+"defaultMaxMemory"：全局默认最大内存（单位 MB，默认 4096 即 4GB）
+"defaultCustomJvmArgs"：全局默认自定义 JVM 参数（不推荐新手修改）
+"defaultJavaPath"：默认 Java 路径。空字符串或 null 表示由 LogX 自动寻找
+"isVersionIsolation"：是否开启全局版本隔离。
+                      true 表示开启（不同的版本拥有独立的 mods 和 saves 文件夹，防冲突）
+                      false 表示关闭（所有版本共享 mods 和 saves）
+
+================ 多路径与实例配置 ================
+
+"minecraftPaths"：Minecraft 路径列表（数组）。
+  |
+  ├── "path"：该游戏根目录的路径（如 "./minecraft" 或 "D:\\mc\\.minecraft"）
+  |   "lastSelectedInstance"：该目录下上次选中的实例名称
+  |
+  └── "configurations"：实例配置映射（字典）。键为实例名，值为具体配置。
+      |
+      ├── "versionId"：真正的 Minecraft 版本 ID（如 "1.20.1-Forge"）
+      ├── "maxMemory"：该实例专属的最大内存（填 null 则使用全局默认值）
+      ├── "javaPath"：该实例专属的 Java 路径（填 null 则使用全局默认值）
+      └── "customJvmArgs"：该实例专属的自定义 JVM 参数（填 null 则使用全局默认值）
+
+【提示】如果某个实例的 maxMemory、javaPath 等留空（或填写 null），
+LogX 会自动应用最上方的 "default..." 全局默认值。
